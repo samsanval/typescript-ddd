@@ -1,0 +1,29 @@
+version: '3'
+services:
+  backend:
+    container_name: typescript_ddd
+    build:
+      context: ./docker/node
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+
+    volumes:
+      - ./api:/home/app
+
+    links:
+      - database
+
+  database:
+    image: mariadb:10.6.11
+    container_name: typescript_database
+    environment:
+      MARIADB_ROOT_PASSWORD: toor
+      MYSQL_ROOT_PASSWORD: toor
+      MARIADB_REPLICATION_MODE: master
+      MARIADB_REPLICATION_USER: replicante
+      MARIADB_REPLICATION_PASSWORD: toor
+    volumes:
+      - ./docker/mariadb/db_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
